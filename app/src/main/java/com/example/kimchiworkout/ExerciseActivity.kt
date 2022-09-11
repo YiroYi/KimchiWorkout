@@ -131,6 +131,11 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
       override fun onFinish() {
         currentExercisePosition++
+
+        exerciseList!![currentExercisePosition].setIsSelected(true)
+        exerciseAdapter!!.notifyDataSetChanged() //This is like react state is changed
+
+
         setupExerciseView()
 
       }
@@ -149,6 +154,11 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
       }
 
       override fun onFinish() {
+
+        exerciseList!![currentExercisePosition].setIsSelected(false)
+        exerciseList!![currentExercisePosition].setIsCompleted(true)
+        exerciseAdapter!!.notifyDataSetChanged() //This is like react state is changed
+
         if (currentExercisePosition < exerciseList?.size!! -1) {
           setupRestView()
         } else {
