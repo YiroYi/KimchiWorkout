@@ -1,5 +1,6 @@
 package com.example.kimchiworkout
 
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -12,6 +13,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kimchiworkout.databinding.ActivityExerciseBinding
+import com.example.kimchiworkout.databinding.DialogCustomBackConfirmationBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,8 +22,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
   private var restTimer: CountDownTimer? = null
   private var restProgress = 0
-  private var restTimerDuration: Long = 1
-  private var exerciseTimerDuration: Long =1
+  private var restTimerDuration: Long = 3
+  private var exerciseTimerDuration: Long = 3
 
   private var exerciseTimer: CountDownTimer? = null
   private var exerciseProgress = 0
@@ -46,7 +48,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     binding?.toolbarExercise?.setNavigationOnClickListener {
-      onBackPressed()
+      customDialogForBackButton()
     }
 
     exerciseList = Constants.defaultExerciseList()
@@ -59,6 +61,31 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     setupExerciseStatusRecyclerView()
 
   }
+
+  override fun onBackPressed() {
+    customDialogForBackButton()
+    //super.onBackPressed()
+  }
+
+  private fun customDialogForBackButton() {
+    val customDialog = Dialog(this)
+    val dialogBinding = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
+
+    customDialog.setContentView((dialogBinding.root))
+    customDialog.setCanceledOnTouchOutside(false)
+
+    dialogBinding.tvYes.setOnClickListener {
+      this@ExerciseActivity.finish()
+      customDialog.dismiss()
+    }
+
+    dialogBinding.tvNo.setOnClickListener {
+      customDialog.dismiss()
+    }
+
+    customDialog.show()
+  }
+
 
   private fun setupExerciseStatusRecyclerView() {
     binding?.rvExerciseStatus?.layoutManager =
